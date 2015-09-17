@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<script src="/js/firework.js"></script>
+		<script src="/js/singlefire.js"></script>
+		<script src="/js/doublefire.js"></script>
+		<script type="text/javascript">
+			var timer_tick = 100;
+			var opac;
+			var fireNum;
+			function start()
+			{
+				var ctx = document.getElementById('tutorial').getContext('2d');
+				ctx.canvas.width = window.innerWidth;
+				ctx.canvas.height = window.innerHeight;
+				init();
+			}
+			function init(){
+				timer_tick =100;
+				if(Math.random()<0.5)
+				{
+					fireNum = Math.floor(getRandom(3,6));
+					for(var i=0 ; i<fireNum ; i++)
+					{
+						var tempP = new Point3D(getRandom(0,window.innerWidth),getRandom(0,window.innerHeight/2),getRandom(-500,500));
+						var exdelay = getRandom(0,50);
+						var exduration = getRandom(100,110);
+						fireWorks[i] = new SingleFire();
+
+						fireWorks[i].FireInit(tempP, 30 - fireNum, 12, firecolor[Math.floor(getRandom(0, 5))], exdelay, exduration-fireNum*5);
+						var time = exdelay + exduration - fireNum*5;	
+						if(timer_tick < time)
+						{
+							timer_tick = time;
+						}
+					}
+				}
+				else
+				{
+					fireNum = Math.floor(getRandom(1,4));
+					for(var i=0 ; i<fireNum*2 ; i+=2)
+					{
+						var tempP = new Point3D(getRandom(0,window.innerWidth), getRandom(0,window.innerHeight/2), getRandom(-500,500));
+						var exdelay = getRandom(0,50);
+						var exduration = getRandom(100,110);
+
+						fireWorks[i] = new DoubleFire();
+						fireWorks[i+1] = new DoubleFire();
+						fireWorks[i].FireInit(tempP, 20, 10, firecolor[Math.floor(getRandom(0, 5))], exdelay, exduration - fireNum * 10);// FireInit(Explode Location, fireNum(<30), fire velocity, fire Color)
+						fireWorks[i+1].FireInit(tempP, 17, 8, firecolor_light[Math.floor(getRandom(0, 5))], exdelay + 5, exduration-fireNum*10+20);
+						var time = exdelay + 5 + exduration - fireNum * 10 + 20;
+						if(timer_tick < time)
+						{
+							timer_tick = time;
+						}
+					}
+					fireNum*=2;
+				}
+				window.setTimeout(draw,10);
+			}
+			function draw()
+			{
+				var ctx = document.getElementById('tutorial').getContext('2d');
+				ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);	
+				for(var j=0 ; j<fireNum ; j++)	
+				{
+					if(fireWorks[j].IsExplode == true)
+					{
+						ctx.globalAlpha = fireWorks[j].opac;
+						for(var i=0 ; i<fireWorks[j].fn ; i++)
+						{
+							ctx.fillStyle = fireWorks[j].firePoints[i].color;
+							ctx.fillRect(fireWorks[j].firePoints[i].FlatX()-1,fireWorks[j].firePoints[i].FlatY()-1,3,3);
+//							ctx.fillStyle = "white";
+//							ctx.fillRect(fireWorks[j].firePoints[i].FlatX(),fireWorks[j].firePoints[i].FlatY(),1,1);
+						}
+					}
+					fireWorks[j].progress();
+				}
+				timer_tick--;
+				if(timer_tick>0)
+					window.setTimeout(draw,10);
+				else
+				{
+					window.setTimeout(init,500);
+				}
+			}
+		</script>
+		<style>
+		body {
+			background-color : #050510;
+			margin : 0;
+
+		}
+		</style>
+	</head>
+	<body onload = "start();">
+		<canvas id = "tutorial"></canvas>
+	</body>
+</html>
