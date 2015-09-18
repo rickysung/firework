@@ -1,4 +1,4 @@
-var gravity = new Vector3D(2, new Point3D(0,1,0));
+var gravity = new Vector3D(1, new Point3D(0,1,0));
 function DoubleFire() 
 {
 	this.firePoints = new Array(5000);

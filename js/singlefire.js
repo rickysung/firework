@@ -11,6 +11,7 @@ function SingleFire()
 	this.explodeduration=0;
 	var tick;
 	this.IsExplode=false;
+	this.IsDone = false;
 	this.FireInit = function(point, div, vel, color, exde, exdu)
 	{
 		var cof = 0.3;
@@ -68,7 +69,7 @@ function SingleFire()
 		this.IsExplode = false;
 		tick=0;
 	}
-	this.progress = function()
+	this.progress = function(c)
 	{
 		tick++;
 		if(this.IsExplode == false)
@@ -82,15 +83,18 @@ function SingleFire()
 			{
 				for(var i=0 ; i<this.fn ; i++)
 				{
-					this.firePoints[i].Add(this.fireVectors[i]);
-					this.firePoints[i].Add(gravity);
-					this.fireVectors[i].mag/=1.03;
+					this.firePoints[i].Add(c, this.fireVectors[i]);
+					this.firePoints[i].Add(c, gravity);
+					this.fireVectors[i].mag/=1.01;
 				}
 				if(this.explodedelay+this.explodeduration - tick <=40)
 				{
 					this.opac -= 0.025;
 					if(this.opac < 0.05)
+					{
 						this.opac = 0;
+						IsDone = true;
+					}
 				}
 			}
 		}
