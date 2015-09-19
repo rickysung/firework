@@ -7,6 +7,8 @@ var fps = 60;
 var interval = 1000/fps;
 var width;
 var height;
+var scaleCof;
+var fireSize;
 function start()
 {
 	init();
@@ -17,9 +19,15 @@ function init(){
 	var tmprandom = Math.floor(Math.random()*1000000)%6;
 	width = ctx.canvas.width;
 	height = ctx.canvas.height;
+	scaleCof = width / window.innerWidth;
+	fireSize = 2;
+	if(scaleCof<0.5)
+		fireSize = 1;
+
+
 	switch(tmprandom)
 	{
-		// FireInit(Explode Location, fireNum(<30), fire velocity, fire Color)
+		// FireInit(Explode Location, fireNum(<30), fire velocity, fire Color, explosion delay, explosion duration)
 		case 0:// Basic Explosion
 		{
 			fireNum = Math.floor(getRandom(3,6));
@@ -31,7 +39,7 @@ function init(){
 				var exduration = getRandom(100,110);
 				var fcolor = firecolor[Math.floor(getRandom(0,5))][Math.floor(getRandom(0,4))];
 				fireWorks[i] = new SingleFire();
-				fireWorks[i].FireInit(tempP, 25 - fireNum, 10, fcolor, exdelay, exduration-fireNum*5);
+				fireWorks[i].FireInit(tempP, 22, 10*scaleCof, fcolor, exdelay, exduration-fireNum*5);
 				var time = exdelay + exduration - fireNum*5;	
 				if(timer_tick < time)
 				{
@@ -54,9 +62,9 @@ function init(){
 				fireWorks[i] = new SingleFire();
 				fireWorks[i+1] = new SingleFire();
 				fireWorks[i+2] = new SingleFire();
-				fireWorks[i].FireInit(tempP, 20, 9, fcolor, exdelay, exduration);
-				fireWorks[i+1].FireInit(tempP, 17, 7, fcolor_light, exdelay+10, exduration);
-				fireWorks[i+2].FireInit(tempP, 15, 5, fcolor_light2, exdelay+20, exduration);
+				fireWorks[i].FireInit(tempP, 20, 9 * scaleCof, fcolor, exdelay, exduration);
+				fireWorks[i+1].FireInit(tempP, 17, 7 * scaleCof, fcolor_light, exdelay+10, exduration);
+				fireWorks[i+2].FireInit(tempP, 15, 5 * scaleCof, fcolor_light2, exdelay+20, exduration);
 				var time = exdelay + 20 + exduration;
 				if(timer_tick < time)
 				{
@@ -77,7 +85,7 @@ function init(){
 				var exduration = getRandom(40,50);
 				var fcolor = basecolor[Math.floor(getRandom(0,4))];
 				fireWorks[i] = new SingleFire();
-				fireWorks[i].FireInit(tempP, 7, 3, fcolor, exdelay, exduration);
+				fireWorks[i].FireInit(tempP, 7, 3 * scaleCof, fcolor, exdelay, exduration);
 				var time = exdelay + exduration;
 				if(timer_tick < time)
 				{
@@ -99,12 +107,12 @@ function init(){
 			var velocity = 10;
 			var div = 30;
 			fireWorks[0] = new SingleFire();
-			fireWorks[0].FireInit(tempP, div, velocity, fcolor, exdelay, exduration);
+			fireWorks[0].FireInit(tempP, div, velocity * scaleCof, fcolor, exdelay, exduration);
 			for(var i=1 ; i<fireNum*taillength ; i++)
 			{
 				exdelay+=1;				
 				fireWorks[i] = new SingleFire();
-				fireWorks[i].FireInit(tempP, div, velocity, fcolor_light, exdelay, exduration);
+				fireWorks[i].FireInit(tempP, div, velocity * scaleCof, fcolor_light, exdelay, exduration);
 				fireWorks[i].firePoints = [];
 				fireWorks[i].fireVectors = [];
 				for(var j=0 ; j<fireWorks[0].fn ; j++)
@@ -133,7 +141,7 @@ function init(){
 				var exduration = getRandom(110,120);
 				var fcolor = firecolor_light[Math.floor(getRandom(0,5))][Math.floor(getRandom(0,3))];
 				fireWorks[i] = new SmileFire();
-				fireWorks[i].FireInit(tempP, 40, 7, fcolor, exdelay, exduration-fireNum*5);
+				fireWorks[i].FireInit(tempP, 40, 7 * scaleCof, fcolor, exdelay, exduration-fireNum*5);
 				var time = exdelay + exduration - fireNum*5;	
 				if(timer_tick < time)
 				{
@@ -152,7 +160,7 @@ function init(){
 			var fcolor = firecolor[Math.floor(getRandom(0,5))][Math.floor(getRandom(0,4))];
 			var fcolor_light = firecolor_light[Math.floor(getRandom(0,5))][Math.floor(getRandom(0,3))];
 			fireWorks[0] = new SingleFire();
-			fireWorks[0].FireInit(tempP, 25, 10, fcolor, exdelay, exduration);
+			fireWorks[0].FireInit(tempP, 25, 10 * scaleCof, fcolor, exdelay, exduration);
 			for(var i=1 ; i<fireNum+1 ; i++)
 			{
 				var x, y;
@@ -163,7 +171,7 @@ function init(){
 				var exdelay2 = exduration + getRandom(-40,10);
 				var exduration2 = getRandom(40, 60);
 				fireWorks[i] = new SingleFire();
-				fireWorks[i].FireInit(tempP2, 7, 6, fcolor_light, exdelay2, exduration2);
+				fireWorks[i].FireInit(tempP2, 7, 6 * scaleCof, fcolor_light, exdelay2, exduration2);
 				var time = exdelay2 + exduration2;
 				if(timer_tick < time)
 				{
@@ -194,7 +202,7 @@ function draw()
 			for(var i=0 ; i<fireWorks[j].fn ; i++)
 			{
 				ctx.fillStyle = fireWorks[j].firePoints[i].color;
-				ctx.fillRect(fireWorks[j].firePoints[i].FlatX()-1,fireWorks[j].firePoints[i].FlatY()-1,2,2);
+				ctx.fillRect(fireWorks[j].firePoints[i].FlatX()-1,fireWorks[j].firePoints[i].FlatY()-1,fireSize,fireSize);
 			}
 		}
 		fireWorks[j].progress(cof);
