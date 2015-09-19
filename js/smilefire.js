@@ -11,7 +11,7 @@ function SmileFire()
 	var tick;
 	this.IsExplode=false;
 	this.IsDone = false;
-	var gravity = new Vector3D(1, new Point3D(0,1,0));
+
 	this.FireInit = function(point, div, vel, color, exde, exdu)
 	{
 			var cof = 0.1;

@@ -21,9 +21,9 @@ function init(){
 	height = ctx.canvas.height;
 	scaleCof = width / window.innerWidth;
 	fireSize = 2;
-	gravity.mag *= scaleCof;
+	gravity = new Vector3D(scaleCof, new Point(0,1,0);
 
-	if(scaleCof<0.5)
+	if(scaleCof<0.5 || window.innerWidth < 480)
 		fireSize = 1;
 
 
