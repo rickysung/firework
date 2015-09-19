@@ -21,6 +21,8 @@ function init(){
 	height = ctx.canvas.height;
 	scaleCof = width / window.innerWidth;
 	fireSize = 2;
+	gravity.mag *= scaleCof;
+
 	if(scaleCof<0.5)
 		fireSize = 1;
 
@@ -165,8 +167,8 @@ function init(){
 			{
 				var x, y;
 				var ang = 2*Math.PI*i/fireNum;
-				x = getRandom(300,500) * Math.cos(ang);
-				y = -getRandom(300,500) * Math.sin(ang);
+				x = getRandom(300,500) * Math.cos(ang) * scaleCof;
+				y = -getRandom(300,500) * Math.sin(ang) * scaleCof;
 				var tempP2 = new Point3D(tempP.X + x, tempP.Y + y, getRandom(-500,500));
 				var exdelay2 = exduration + getRandom(-40,10);
 				var exduration2 = getRandom(40, 60);

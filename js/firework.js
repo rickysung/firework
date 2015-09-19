@@ -24,6 +24,7 @@ function getRandom(s,f)
 	return Math.random()*(f-s)+s;
 }
 
+var gravity = new Vector3D(1, new Point3D(0,1,0));
 var color_red = new Array("#FF0000","#FF2222", "#FF2222", "#FF2222");
 var color_green = new Array("#00FF00", "#22FF22", "#44FF44", "#88FF88");
 var color_blue = new Array("0000FF", "#2222FF", "#4444FF", "#8888FF");
