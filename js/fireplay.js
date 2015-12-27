@@ -397,7 +397,7 @@ var FIREWORKS = (function(ns){
         var i;
         for(i=0 ; i<n ; i++)
         {
-            tmpPoint = tmpPoint.concat(new Point3D(st.X + i*dv.X, st.Y + i*dv.Y, st.Z + i*dv.Z));
+            tmpPoint = tmpPoint.concat(new Point3D((st.X + i*dv.X), (st.Y + i*dv.Y), (st.Z + i*dv.Z)));
         }
         return tmpPoint;
     }
@@ -438,7 +438,7 @@ var FIREWORKS = (function(ns){
             var origin = new Point3D(st + dn * (k+1), height *0.4 + getRandom(-50,50), getRandom(-100,100));
             for(i=0 ; i<letter.length ; i++)
             {
-                var tempP = new Point3D(origin.X + letter[i].X, origin.Y + letter[i].Y, origin.Z +  letter[i].Z);
+                var tempP = new Point3D(origin.X + letter[i].X*scaleCof, origin.Y + letter[i].Y*scaleCof, origin.Z + letter[i].Z*scaleCof);
                 exdelay += getRandom(0,2);
                 var exduration = getRandom(40,50);
                 fireWorks_tmp[cnt] = new SingleFire();
@@ -557,7 +557,7 @@ var FIREWORKS = (function(ns){
         timer_tick =100;
         width = ctx.canvas.width;
         height = ctx.canvas.height;
-        scaleCof = width / window.innerWidth;
+        scaleCof = (width / window.innerWidth)<(height / window.innerHeight)?(width / window.innerWidth):(height / window.innerHeight);
         fireSize = 2;
         gravity = new Vector3D(scaleCof, new Point3D(0,1,0));
         if(scaleCof<0.5 || window.innerWidth < 480)
