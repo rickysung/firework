@@ -14,10 +14,39 @@ var FIREWORKS = (function(ns){
     var LetterFire = {};
     var letterPoint = 0;
     var Sentences = ["TEST"];
-    LetterFire["A"] = getLineFires(new Point3D(-200,175,30), new Point3D(0,-400,-60)).concat(
+    LetterFire['0'] = getArcFires(new Point3D(0,0,0),-Math.PI*0.5,1.5*Math.PI,300,true);
+    LetterFire['1'] = getLineFires(new Point3D(-40,-160,0), new Point3D(0,-200,0)).concat(
+                        getLineFires(new Point3D(0,-200,0), new Point3D(0,300,0))).concat(
+                        getLineFires(new Point3D(-40,300,30), new Point3D(60,300,30)));
+    LetterFire['2'] = getArcFires(new Point3D(0,-100,0),0,1.25*Math.PI,200,true).concat(
+                        getLineFires(new Point3D(200,-100,0), new Point3D(-200,250,0))).concat(
+                        getLineFires(new Point3D(-200,250,0), new Point3D(200,250,0)));
+    LetterFire['3'] = getArcFires(new Point3D(0,-100,0), 0, 1.25*Math.PI,200,true).concat(
+                        getLineFires(new Point3D(200,-100,0), new Point3D(0,0,0))).concat(
+                        getLineFires(new Point3D(0,0,0), new Point3D(200,100,0))).concat(
+                        getArcFires(new Point3D(0,100,0), 1.25*Math.PI, 2*Math.PI,200, true));
+    LetterFire['4'] = getLineFires(new Point3D(0,-300,0), new Point3D(-200,0,0)).concat(
+                        getLineFires(new Point3D(-200,0,0), new Point3D(200,0,0))).concat(
+                        getLineFires(new Point3D(0,-300,0), new Point3D(0,300,0)));
+    LetterFire['5'] = getLineFires(new Point3D(-200,-200,0), new Point3D(200,-200,0)).concat(
+                        getLineFires(new Point3D(-200,-200,0), new Point3D(-200,0,0))).concat(
+                        getArcFires(new Point3D(-50, 80.603, 0), Math.PI*2.9652, Math.PI*4.9012, 173.205, true));
+    LetterFire['6'] = getArcFires(new Point3D(0,0,0), 0, Math.PI, 200, false).concat(
+                        getArcFires(new Point3D(100,0,0), Math.PI, 1.5*Math.PI, 300, false)).concat(
+                        getArcFires(new Point3D(100,200,0), Math.PI * 1.5, Math.PI * 2, 100, false)).concat(
+                        getArcFires(new Point3D(0,200,0), 0, Math.PI * 0.9, 200, false));
+    LetterFire['7'] = getLineFires(new Point3D(-200,-200,0), new Point3D(200,-200,0)).concat(
+                        getLineFires(new Point3D(200, -200,0), new Point3D(-200,400,0)));
+    LetterFire['8'] = getArcFires(new Point3D(0,-150,0), -Math.PI*0.5, Math.PI*1.5, 150, true).concat(
+                        getArcFires(new Point3D(0,200,0), Math.PI*0.5, Math.PI*2.5, 200, false));
+    LetterFire['9'] = getArcFires(new Point3D(0,-200,0), Math.PI, 1.9*Math.PI, 200, true).concat(
+                        getArcFires(new Point3D(-100,-200,0), Math.PI*0.5, Math.PI, 100, true)).concat(
+                        getArcFires(new Point3D(-100, 0, 0), 0, Math.PI*0.5, 300, true)).concat(
+                        getArcFires(new Point3D(-50,0,0), Math.PI, Math.PI*2, 250, true));
+    LetterFire['A'] = getLineFires(new Point3D(-200,175,30), new Point3D(0,-400,-60)).concat(
                         getLineFires(new Point3D(0,-400,-60), new Point3D(200,175,40))).concat(
                         getLineFires(new Point3D(-150,0,0), new Point3D(150,0,0)));
-    LetterFire["B"] = getLineFires(new Point3D(-200,-200,30), new Point3D(-200,200,0)).concat(
+    LetterFire['B'] = getLineFires(new Point3D(-200,-200,30), new Point3D(-200,200,0)).concat(
                         getLineFires(new Point3D(-200,-200,0), new Point3D(0, -200, 20))).concat(
                         getArcFires(new Point3D(0,-100,0),-Math.PI/2,Math.PI/2,100,true)).concat(
                         getLineFires(new Point3D(0,0,0), new Point3D(-200,0,0))).concat(
@@ -101,6 +130,7 @@ var FIREWORKS = (function(ns){
     {
         if(typeof(text)=="undefined")
             text = "";
+        text = text.toUpperCase();
         Sentences = text.split(' ');
         init();
     }
@@ -435,6 +465,8 @@ var FIREWORKS = (function(ns){
         for(var k=0 ; k<letters.length ; k++)
         {
             letter = LetterFire[letters[k]];
+            if(typeof LetterFire[letters[k]]=="undefined")
+                letter = LetterFire[' '];
             var origin = new Point3D(st + dn * (k+1), height *0.4 + getRandom(-50,50), getRandom(-100,100));
             for(i=0 ; i<letter.length ; i++)
             {
