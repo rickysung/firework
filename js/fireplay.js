@@ -131,7 +131,7 @@ var FIREWORKS = (function(ns){
         if(typeof(text)=="undefined")
             text = "";
         text = text.toUpperCase();
-        Sentences = text.split(' ');
+        Sentences = text.split(/[\s\+]+/);
         init();
     }
     function Point3D(x, y, z)
@@ -465,7 +465,7 @@ var FIREWORKS = (function(ns){
         for(var k=0 ; k<letters.length ; k++)
         {
             letter = LetterFire[letters[k]];
-            if(typeof LetterFire[letters[k]]=="undefined")
+            if(typeof LetterFire[letters[k]]=="undefined" || letters[k] == '+')
                 letter = LetterFire[' '];
             var origin = new Point3D(st + dn * (k+1), height *0.4 + getRandom(-50,50), getRandom(-100,100));
             for(i=0 ; i<letter.length ; i++)
@@ -508,17 +508,17 @@ var FIREWORKS = (function(ns){
     }
     function GalaxyExplosion()
     {
-        var n = Math.floor(getRandom(100,120));
+        var n = Math.floor(getRandom(300,400));
         var fireWorks_tmp = [];
         var basecolor = firecolor[Math.floor(getRandom(0,5))];
         for(var i=0 ; i<n ; i++)
         {
             var tempP = new Point3D(getRandom(0,width), getRandom(height*2/7,height*4/7), getRandom(-500,500));
-            var exdelay = getRandom(30,50);
-            var exduration = getRandom(40,50);
+            var exdelay = getRandom(30,250);
+            var exduration = getRandom(70,90);
             var fcolor = basecolor[Math.floor(getRandom(0,4))];
             fireWorks_tmp[i] = new SingleFire();
-            fireWorks_tmp[i].FireInit(tempP, 7, 3 * scaleCof, fcolor, exdelay, exduration, 1);
+            fireWorks_tmp[i].FireInit(tempP, 7,5* scaleCof, fcolor, exdelay, exduration, 2);
             var time = exdelay + exduration;
             if(timer_tick < time)
             {
@@ -532,7 +532,7 @@ var FIREWORKS = (function(ns){
         var n = 1;
         var taillength = 3;
         var tempP = new Point3D(getRandom(width*2/5,width*3/5), getRandom(height/7,height/2), getRandom(-500,500));
-        var exdelay = getRandom(30,150);
+        var exdelay = getRandom(30,50);
         var exduration = getRandom(90,120);
         var v = Math.floor(getRandom(0,5));
         var fcolor = firecolor[v][Math.floor(getRandom(0,4))];
@@ -652,7 +652,7 @@ var FIREWORKS = (function(ns){
             window.requestAnimationFrame(draw);
         else
         {
-            window.setTimeout(init,200);
+            window.setTimeout(init,20);
         }
     }
     return ns;
