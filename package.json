@@ -1,0 +1,37 @@
+{
+  "name": "firework",
+  "version": "1.0.0",
+  "description": "WebGL fireworks over a procedural Han River night scene",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "playwright test",
+    "format": "prettier --write src index.html tests vite.config.js playwright.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickysung/firework.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/rickysung/firework/issues"
+  },
+  "homepage": "https://github.com/rickysung/firework#readme",
+  "dependencies": {
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "prettier": "^3.9.6",
+    "vite": "^8.2.2"
+  },
+  "private": true
+}

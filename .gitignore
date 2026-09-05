@@ -1,1 +1,7 @@
 /tomoonyoung
+
+node_modules/
+dist/
+.DS_Store
+test-results/
+playwright-report/

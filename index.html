@@ -1,64 +1,179 @@
-<html>
-	<head>
-		<title>
-			Sol-la-Do-Re-Mi
-		</title>
-	<script src="js/fireplay.js"></script>
-		<script type="text/javascript">
-            var QueryString = function () {
-                // This function is anonymous, is executed immediately and 
-                // the return value is assigned to QueryString!
-                var query_string = {};
-                var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i=0;i<vars.length;i++) 
-                {
-                    var pair = vars[i].split("=");
-                    // If first entry with this na
-                    if (typeof query_string[pair[0]] === "undefined") 
-                    {
-                        query_string[pair[0]] = decodeURIComponent(pair[1]);
-                        // If second entry with this name
-                    }
-                    else if (typeof query_string[pair[0]] === "string") 
-                    {
-                        var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
-                        query_string[pair[0]] = arr;
-                    }
-                    else 
-                    {
-                        query_string[pair[0]].push(decodeURIComponent(pair[1]));
-                    }
-                } 
-                    return query_string;
-            }();
-
-			function keepfullscreen()
-			{
-				canvas = document.getElementById('firework');
-				canvas.width = window.innerWidth;
-				canvas.height = window.innerHeight;
-			}
-		</script>
-		<style>
-			body {
-				background-color : #050510;
-				width : 100%;
-				height: 100%;
-				margin : 0;
-				position : absolute;
-			}
-			h6 {
-				color : white;
-			}
-			canvas {
-				display : block;
-				position : absolute;
-			}
-		</style>
-	</head>
-	<body onload = "keepfullscreen();FIREWORKS.startfire(QueryString.text);" onresize = "keepfullscreen();">
-		<canvas id = "firework"></canvas>
-		<h6>Code by changhun.sung</h6>
-	</body>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <meta name="theme-color" content="#07121f" />
+    <meta
+      name="description"
+      content="강물에 비치는 불꽃, 서울의 야경. 시점을 바꾸며 즐기는 3D 불꽃놀이."
+    />
+    <title>한강의 밤 — Fireworks on the Han</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas
+        id="scene"
+        aria-label="강물 위에서 펼쳐지는 3차원 불꽃놀이. 아래 버튼으로 시점과 불꽃을 선택하세요."
+      ></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <header class="hud masthead">
+        <div class="identity">
+          <span class="location"><span class="live-dot"></span>서울, 한강</span>
+          <h1>한강의 밤<span>Fireworks on the Han</span></h1>
+          <p>도시가 잠들면, 하늘이 피어납니다.</p>
+        </div>
+        <div class="top-actions">
+          <button
+            id="settings-toggle"
+            class="icon-button"
+            aria-label="장면 설정"
+            aria-expanded="false"
+            aria-controls="settings"
+          >
+            ☷ <span>장면 설정</span></button
+          ><button id="immersive" class="icon-button" aria-label="몰입 모드">
+            ⛶ <span>몰입</span>
+          </button>
+        </div>
+      </header>
+      <aside id="settings" class="settings" hidden aria-label="장면 설정">
+        <div class="panel-heading">
+          <h2>나만의 한강</h2>
+          <button
+            id="settings-close"
+            class="icon-button"
+            aria-label="설정 닫기"
+          >
+            ×
+          </button>
+        </div>
+        <label class="setting-label" for="pattern">불꽃 시퀀스</label>
+        <select id="pattern">
+          <option value="auto">자동 공연 · 구형과 겹구형 중심</option>
+          <option value="basic">구형 · 빛의 합주</option>
+          <option value="massive">겹구형 · 다중 코어</option>
+          <option value="willow">황금 커튼 · 금빛 비</option>
+          <option value="galaxy">갤럭시 · 별의 물결</option>
+        </select>
+        <label class="setting-label" for="ground-program"
+          >발사대 프로그램</label
+        >
+        <select id="ground-program">
+          <option value="auto">자동 · 프로그램 섞기</option>
+          <option value="fan">부채꼴 · 펼침과 응답</option>
+          <option value="vertical">수직 연발 · 빛의 기둥</option>
+          <option value="cross">교차 발사 · 겹치는 궤적</option>
+          <option value="chase">코멧 · 좌우로 흐르는 빛</option>
+        </select>
+        <div class="range-heading">
+          <label for="bloom">빛 번짐</label
+          ><output id="bloom-value">65%</output>
+        </div>
+        <input id="bloom" type="range" min="0" max="100" value="65" />
+        <div class="range-heading">
+          <label for="water">물결과 반사 흐림</label
+          ><output id="water-value">55%</output>
+        </div>
+        <input id="water" type="range" min="0" max="100" value="55" />
+        <div class="range-heading">
+          <label for="dof">렌즈 보케</label><output id="dof-value">12%</output>
+        </div>
+        <input id="dof" type="range" min="0" max="100" value="12" />
+        <div class="range-heading">
+          <label for="focus">초점 거리</label
+          ><output id="focus-value">자동 · 불꽃</output>
+        </div>
+        <input
+          id="focus"
+          type="range"
+          min="100"
+          max="1600"
+          value="700"
+          step="10"
+        /><label class="check"
+          ><input id="autofocus" type="checkbox" checked /> 불꽃에 자동
+          초점</label
+        >
+        <label class="setting-label" for="quality">화질</label
+        ><select id="quality">
+          <option value="balanced">균형</option>
+          <option value="high">높음</option>
+          <option value="low">성능 우선</option>
+        </select>
+        <form id="message-form">
+          <label class="setting-label" for="message">하늘에 남길 말</label>
+          <div class="message-row">
+            <input
+              id="message"
+              maxlength="24"
+              placeholder="SEOUL, I LOVE YOU…"
+              aria-describedby="message-help"
+            /><button type="submit">쏘기</button>
+          </div>
+          <small id="message-help"
+            >기존 글자 불꽃 · 영문과 숫자, 최대 24자</small
+          >
+        </form>
+        <p class="shortcuts">
+          1–3 시점 변경 &nbsp; Space 재생/정지<br />F 몰입 모드 &nbsp; Esc
+          돌아가기
+        </p>
+      </aside>
+      <footer class="hud controls">
+        <div class="show-info">
+          <span
+            ><span class="live-dot"></span
+            ><span id="show-name">구형 · 빛의 합주</span></span
+          ><span id="elapsed">00:00</span>
+        </div>
+        <div class="progress"><div id="progress-fill"></div></div>
+        <div class="control-deck">
+          <nav class="views" aria-label="카메라 시점">
+            <button data-view="river" aria-pressed="true">
+              <span class="view-icon">≋</span
+              ><span>강변<small>물가에서 올려다보기</small></span
+              ><kbd>1</kbd>
+            </button>
+            <button data-view="tower" aria-pressed="false">
+              <span class="view-icon">▥</span
+              ><span>고층 빌딩<small>도시 위의 파노라마</small></span
+              ><kbd>2</kbd>
+            </button>
+            <button data-view="heli" aria-pressed="false">
+              <span class="view-icon">◎</span
+              ><span>헬리콥터<small>불꽃 주위를 천천히</small></span
+              ><kbd>3</kbd>
+            </button>
+          </nav>
+          <div class="playback">
+            <button id="pause" class="round-button" aria-label="일시 정지">
+              Ⅱ</button
+            ><button id="launch" class="launch-button">
+              불꽃 쏘기 <span>✧</span>
+            </button>
+          </div>
+        </div>
+        <div class="footnote">
+          <span>한강에서 영감을 받은 가상의 풍경</span
+          ><span id="view-caption">강변 산책로 · 수면 위 18 m</span>
+        </div>
+      </footer>
+      <button id="exit-immersive" hidden>몰입 모드 종료 <kbd>Esc</kbd></button>
+      <div id="notice" role="status" aria-live="polite"></div>
+      <div id="loading">
+        <span class="loading-mark">✧</span>
+        <p>한강에 밤이 내려오는 중</p>
+      </div>
+      <div id="error" hidden role="alert">
+        <h2>3D 장면을 열 수 없습니다</h2>
+        <p id="error-detail">
+          WebGL 2를 지원하는 브라우저에서 하드웨어 가속을 켜고 다시 열어 주세요.
+        </p>
+        <button onclick="location.reload()">다시 시도</button>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
