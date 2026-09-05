@@ -18,7 +18,13 @@ npm run build
 npm run preview
 ```
 
-배포 시 `dist/` 내용을 정적 호스팅에 올립니다. 상대 경로 빌드이므로 `/firework/` 같은 하위 경로도 지원합니다. 기존 Jekyll 소스 배포 방식에서는 먼저 Vite 빌드를 수행하도록 배포 설정을 바꿔야 합니다. 실행에 외부 CDN, 이미지, 폰트, API 키는 필요하지 않습니다.
+배포 시 `dist/` 내용을 정적 호스팅에 올립니다. 상대 경로 빌드이므로 `/firework/` 같은 하위 경로도 지원합니다. 실행에 외부 CDN, 이미지, 폰트, API 키는 필요하지 않습니다.
+
+### GitHub Pages 배포
+
+[배포 사이트](https://rickysung.github.io/firework/)는 `.github/workflows/deploy.yml`로 자동 배포합니다. `master`에 푸시하면 Node.js 22에서 의존성 설치, 테스트, Vite 빌드를 수행하고 `dist/`만 GitHub Pages에 올립니다. Actions 탭에서 수동 실행도 가능합니다.
+
+저장소 Settings → Pages → Build and deployment → Source는 **GitHub Actions**로 설정합니다. 소스 브랜치를 그대로 배포하는 기존 Jekyll 방식은 사용하지 않습니다. 빌드 전 `index.html`은 개발용 `/src/main.js`를 참조하므로 Pages에 그대로 올리면 404가 발생합니다.
 
 ## 장면과 조작
 
